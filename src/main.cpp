@@ -1,10 +1,10 @@
 #include "WiFi.h"
 #include "PubSubClient.h" //pio lib install "knolleary/PubSubClient"
 
-#define SSID          "Techtile"
-#define PWD           "Techtile229"
+#define SSID          "IB3"
+#define PWD           "ingenieursbeleving3"
 
-#define MQTT_SERVER   "10.128.48.25"
+#define MQTT_SERVER   "192.168.0.110"
 #define MQTT_PORT     1883
 
 #define LED_PIN       2
@@ -66,7 +66,7 @@ void callback(char *topic, byte *message, unsigned int length)
 
   // If a message is received on the topic esp32/output, you check if the message is either "on" or "off".
   // Changes the output state according to the message
-  if (String(topic) == "esp32/output")
+  if (String(topic) == "nmbs/code")
   {
     Serial.print("Changing output to ");
     if (messageTemp == "on")
@@ -95,7 +95,7 @@ void reconnect()
     {
       Serial.println("connected");
       // Subscribe
-      client.subscribe("esp32/output");
+      client.subscribe("nmbs/code");
     }
     else
     {
@@ -119,5 +119,8 @@ void loop()
   if (now - lastMsg > 5000)
   {
     lastMsg = now;
+
+    // Publish a custom message to the nmbs/code topic
+    client.publish("nmbs/code", "0x89 0xD1 0x12 0xC3");
   }
 }
